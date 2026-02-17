@@ -1,5 +1,14 @@
 require('dotenv').config();
 
+// Validate required env vars before starting (prevents 500 on login/signup)
+const required = ['DATABASE_URL', 'JWT_SECRET'];
+const missing = required.filter((k) => !process.env[k]?.trim());
+if (missing.length) {
+  console.error('❌ Missing required environment variables:', missing.join(', '));
+  console.error('   Set them in Render → Environment');
+  process.exit(1);
+}
+
 // Log why the process might exit (uncaught errors)
 process.on('uncaughtException', err => {
   console.error('❌ Uncaught exception:', err);
